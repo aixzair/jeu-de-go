@@ -249,12 +249,12 @@ public class PlateauGo {
 			while(iterateur.hasNext()) {
 				Coordonnee coordonnee = iterateur.next();
 				
-				/*// Haut
+				// Haut
 				if (coordonnee.getY() != 0) {
-					if (this.) {
+					if (this.plateau[coordonnee.getY() - 1][coordonnee.getX()].ordinal() != ) {
 						
 					}
-				}*/
+				}
 			}
 		}
 	}
