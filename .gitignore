@@ -1,0 +1,14 @@
+**/bin/
+**/out/
+**/target/
+
+*.class
+
+**/.idea
+**/.metadata
+**/.recommenders
+.DS_Store
+**/.project
+**/.classpath
+**/.settings
+.metadata/
