@@ -1,6 +1,6 @@
 package application;
 
-import modeles.PlateauGo;
+import modeles.Plateau;
 
 /** 
  * @author Alexandre Lerosier
@@ -8,8 +8,8 @@ import modeles.PlateauGo;
 public class Main {
 
 	public static void main(String[] args) {
-		PlateauGo plateauGo = new PlateauGo();
-		Partie partie = new Partie(plateauGo);
+		Plateau plateau = new Plateau();
+		Partie partie = new Partie(plateau);
 		
 		partie.jouer();
 	}

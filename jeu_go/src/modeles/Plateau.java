@@ -9,7 +9,7 @@ import application.Interface;
 /** 
  * @author Alexandre Lerosier
  */
-public class PlateauGo {
+public class Plateau {
 	private final byte taille = 3;
 	private Piece[][] plateau = new Piece[this.taille][this.taille];
 	private ArrayList<ArrayList<Coordonnee>> groupes;
@@ -22,7 +22,7 @@ public class PlateauGo {
 	/**
 	 * Créé un plateau de jeu
 	 */
-	public PlateauGo() {
+	public Plateau() {
 		this.initialisation();
 	}
 	
@@ -89,7 +89,7 @@ public class PlateauGo {
 			plateauGroupe = new Piece[this.plateau.length][this.plateau.length];
 			
 			for (Coordonnee pion : groupe) {
-				plateauGroupe[pion.getY()][pion.getX()] = pion.getEmplacement();
+				plateauGroupe[pion.getY()][pion.getX()] = pion.getPiece();
 			}
 			
 			Interface.afficher(plateauGroupe);
@@ -185,7 +185,7 @@ public class PlateauGo {
 							this.plateau[pion.getY() - 1][pion.getX()]
 						);
 						
-						if (pion.getEmplacement().ordinal() == autrePion.getEmplacement().ordinal()
+						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -199,7 +199,7 @@ public class PlateauGo {
 							this.plateau[pion.getY() + 1][pion.getX()]
 						);
 						
-						if (pion.getEmplacement().ordinal() == autrePion.getEmplacement().ordinal()
+						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -213,7 +213,7 @@ public class PlateauGo {
 							this.plateau[pion.getY()][pion.getX() - 1]
 						);
 						
-						if (pion.getEmplacement().ordinal() == autrePion.getEmplacement().ordinal()
+						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -227,7 +227,7 @@ public class PlateauGo {
 							this.plateau[pion.getY()][pion.getX() + 1]
 						);
 						
-						if (pion.getEmplacement().ordinal() == autrePion.getEmplacement().ordinal()
+						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 
@@ -242,21 +242,61 @@ public class PlateauGo {
 
 	/** Trouve les groupes entourés
 	 */
-	private void trouverGroupesEntourer() {
+	private void trouverGroupesEntoure() {
+		
 		for (ArrayList<Coordonnee> groupe : this.groupes) {
-			Iterator<Coordonnee> iterateur = groupe.iterator();
-			
-			while(iterateur.hasNext()) {
-				Coordonnee coordonnee = iterateur.next();
+			if (this.estGroupeEntoure(groupe)) {
 				
-				// Haut
-				if (coordonnee.getY() != 0) {
-					if (this.plateau[coordonnee.getY() - 1][coordonnee.getX()].ordinal() != ) {
-						
-					}
+			}
+			
+		}
+	}
+	
+	/**
+	 * Indique si le groupe est entouré par l'adverssaire ou non
+	 * @param groupe
+	 * @return boolean
+	 */
+	private boolean estGroupeEntoure(ArrayList<Coordonnee> groupe) {
+		Iterator<Coordonnee> iterateur = groupe.iterator();
+		
+		while(iterateur.hasNext()) {
+			Coordonnee coordonnee = iterateur.next();
+			
+			// Haut
+			if (coordonnee.getY() != 0) {
+				if (this.plateau[coordonnee.getY() - 1][coordonnee.getX()].ordinal()
+				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+					return false;
+				}
+			}
+			
+			// Bas
+			if (coordonnee.getY() != this.plateau.length - 1) {
+				if (this.plateau[coordonnee.getY() + 1][coordonnee.getX()].ordinal()
+				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+					return false;
+				}
+			}
+			
+			// Gauche
+			if (coordonnee.getX() != 0) {
+				if (this.plateau[coordonnee.getY()][coordonnee.getX() - 1].ordinal()
+				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+					return false;
+				}
+			}
+			
+			// Droite
+			if (coordonnee.getX() != this.plateau.length - 1) {
+				if (this.plateau[coordonnee.getY()][coordonnee.getX() + 1].ordinal()
+				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+					return false;
 				}
 			}
 		}
+		
+		return true;
 	}
 	
 	/**

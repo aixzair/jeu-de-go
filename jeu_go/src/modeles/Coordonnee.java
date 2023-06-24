@@ -52,7 +52,7 @@ public class Coordonnee {
 	/** Renvoi l'piece
 	 * @return the piece
 	 */
-	public Piece getEmplacement() {
+	public Piece getPiece() {
 		return this.piece;
 	}
 

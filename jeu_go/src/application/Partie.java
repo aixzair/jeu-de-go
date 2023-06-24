@@ -1,21 +1,21 @@
 package application;
 
-import modeles.PlateauGo;
+import modeles.Plateau;
 
 /** 
  * @author Alexandre Lerosier
  */
 public class Partie {
-	private PlateauGo plateauGo;
+	private Plateau plateau;
 	private Interface ihm;
 
-	public Partie(PlateauGo plateauGo) {
-		this.plateauGo = plateauGo;
+	public Partie(Plateau plateau) {
+		this.plateau = plateau;
 		this.ihm = new Interface(this);
 	}
 	
-	public PlateauGo getPlateau() {
-		return this.plateauGo;
+	public Plateau getPlateau() {
+		return this.plateau;
 	}
 	
 	public void jouer() {
@@ -26,6 +26,6 @@ public class Partie {
 		}*/
 		
 		this.ihm.afficher();
-		this.plateauGo.afficherGroupes();
+		this.plateau.afficherGroupes();
 	}
 }
