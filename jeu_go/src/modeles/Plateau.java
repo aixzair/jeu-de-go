@@ -88,8 +88,27 @@ public class Plateau {
 		for (ArrayList<Coordonnee> groupe : this.groupes) {
 			plateauGroupe = new Piece[this.plateau.length][this.plateau.length];
 			
-			for (Coordonnee pion : groupe) {
-				plateauGroupe[pion.getY()][pion.getX()] = pion.getPiece();
+			for (Coordonnee coordonnee : groupe) {
+				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+			}
+			
+			Interface.afficher(plateauGroupe);
+		}
+	}
+	
+	/**
+	 * Affiche les groupes de pion entourés de pion du plateau
+	 */
+	public void afficherGroupesEtoure() {
+		Piece plateauGroupe[][];	
+		
+		this.trouverGroupesEntoure();
+		
+		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
+			plateauGroupe = new Piece[this.plateau.length][this.plateau.length];
+			
+			for (Coordonnee coordonnee : groupe) {
+				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
 			}
 			
 			Interface.afficher(plateauGroupe);
@@ -116,10 +135,12 @@ public class Plateau {
 				this.plateau[lg][col] = Piece.AUCUN;
 			}
 		}
-		this.remplissageTest();
+		
+		this.remplissageAleatoire();
 	}
 	
-	/** Fonction de test
+	/**
+	 * Fonction de test
 	 */
 	private void remplissageTest() {
 		for (byte lg = 0; lg < this.plateau.length; lg++) {
@@ -240,15 +261,19 @@ public class Plateau {
 		}
 	}
 
-	/** Trouve les groupes entourés
+	/**
+	 * Trouve les groupes entourés par les pions adverse
 	 */
 	private void trouverGroupesEntoure() {
+		this.groupesEntrourer = new ArrayList<ArrayList<Coordonnee>>();
+		this.trouverGroupes();
 		
 		for (ArrayList<Coordonnee> groupe : this.groupes) {
-			if (this.estGroupeEntoure(groupe)) {
-				
+			if (!this.estGroupeEntoure(groupe)) {
+				continue;
 			}
 			
+			this.groupesEntrourer.add(groupe);
 		}
 	}
 	
@@ -258,10 +283,7 @@ public class Plateau {
 	 * @return boolean
 	 */
 	private boolean estGroupeEntoure(ArrayList<Coordonnee> groupe) {
-		Iterator<Coordonnee> iterateur = groupe.iterator();
-		
-		while(iterateur.hasNext()) {
-			Coordonnee coordonnee = iterateur.next();
+		for (Coordonnee coordonnee : groupe) {
 			
 			// Haut
 			if (coordonnee.getY() != 0) {
