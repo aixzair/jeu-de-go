@@ -20,9 +20,8 @@ public class Partie {
 	
 	public void jouer() {
 		
-		/*while (plateau.getGagnant() == null) {
-			this.ihm.afficher();
-			break;
+		/*while (!this.plateau.estTerminee()) {
+			
 		}*/
 		
 		this.ihm.afficher();
