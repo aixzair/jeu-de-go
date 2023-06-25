@@ -17,7 +17,7 @@ public class Plateau {
 	private ArrayList<ArrayList<Coordonnee>> groupesEntrourer;
 
 	private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
-	private int tourJoueur = 1;
+	private int joueurActuel;
 	private Joueur gagnant;
 	
 	private int tour = 0;
@@ -120,12 +120,11 @@ public class Plateau {
 	}
 	
 	/**
-	 * Change et renvoie le joueur qui doit jouer.
-	 * @return joueur
+	 * Renvoie le joueur actuel.
+	 * @return le joueur actuel
 	 */
-	public Joueur nextJoueur() {
-		this.tourJoueur = 1 - this.tourJoueur;
-		return this.joueurs.get(this.tourJoueur);
+	public Joueur getJoueurActuel() {
+		return this.joueurs.get(this.joueurActuel);
 	}
 	
 	/**
@@ -347,6 +346,13 @@ public class Plateau {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Change le joueur actuel.
+	 */
+	private void nextJoueur() {
+		this.joueurActuel = 1 - this.joueurActuel;
 	}
 	
 	private void nouveauTour() {
