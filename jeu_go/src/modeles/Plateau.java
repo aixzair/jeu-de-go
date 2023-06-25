@@ -144,6 +144,13 @@ public class Plateau {
 		this.nouveauTour();
 	}
 	
+	/**
+	 * Ne fait rien puis commence un nouveau tour
+	 */
+	public void passerSonTour() {
+		this.nouveauTour();
+	}
+	
 	// -------------- Fonctions privées --------------
 	
 	/**
