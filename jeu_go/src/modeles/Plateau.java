@@ -12,6 +12,7 @@ import application.Interface;
 public class Plateau {
 	private final byte taille = 3;
 	private Piece[][] plateau = new Piece[this.taille][this.taille];
+	
 	private ArrayList<ArrayList<Coordonnee>> groupes;
 	private ArrayList<ArrayList<Coordonnee>> groupesEntrourer;
 
@@ -24,6 +25,7 @@ public class Plateau {
 	 */
 	public Plateau() {
 		this.initialisation();
+		// this.remplissageAleatoire();
 	}
 	
 	// -------------- Getters --------------
@@ -34,8 +36,8 @@ public class Plateau {
 	 * @param col
 	 * @return boolean
 	 */
-	public boolean estEmplacementLibre(int lg, int col) {
-		return this.plateau[lg][col] == Piece.AUCUN;
+	public boolean estCaseLibre(int lg, int col) {
+		return this.plateau[lg][col] == Piece.AUCUNE;
 	}
 	
 	/**
@@ -56,10 +58,10 @@ public class Plateau {
 	}
 
 	/**
-	 * Indique si la partie est terminé
-	 * @return boolean
+	 * Indique si la partie est terminée
+	 * @return si la partie est terminée
 	 */
-	public boolean aGagant() {
+	public boolean estTerminee() {
 		return this.gagnant == null;
 	}
 	
@@ -124,6 +126,13 @@ public class Plateau {
 		return this.joueurs.get(this.tourJoueur);
 	}
 	
+	public void jouer(Coordonnee coordonnee)
+	throws CaseNonVideException {
+		if (this.plateau[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
+			throw new CaseNonVideException();
+		}
+	}
+	
 	// -------------- Fonctions privées --------------
 	
 	/**
@@ -132,24 +141,9 @@ public class Plateau {
 	private void initialisation() {
 		for (byte lg = 0; lg < this.plateau.length; lg++) {
 			for (byte col = 0; col < this.plateau[lg].length; col++) {
-				this.plateau[lg][col] = Piece.AUCUN;
+				this.plateau[lg][col] = Piece.AUCUNE;
 			}
 		}
-		
-		this.remplissageAleatoire();
-	}
-	
-	/**
-	 * Fonction de test
-	 */
-	private void remplissageTest() {
-		for (byte lg = 0; lg < this.plateau.length; lg++) {
-			for (byte col = 0; col < this.plateau.length; col++) {
-				this.plateau[lg][col] = Piece.BLANC;
-			}
-		}
-		
-		this.plateau[1][1] = Piece.NOIR;
 	}
 	
 	/**
@@ -161,7 +155,7 @@ public class Plateau {
 		for (byte lg = 0; lg < this.plateau.length; lg++) {
 			for (byte col = 0; col < this.plateau.length; col++) {
 				switch(random.nextInt(3)) {
-				case 0: this.plateau[lg][col] = Piece.AUCUN; break;
+				case 0: this.plateau[lg][col] = Piece.AUCUNE; break;
 				case 1: this.plateau[lg][col] = Piece.BLANC; break;
 				case 2: this.plateau[lg][col] = Piece.NOIR; break;
 				}
@@ -181,7 +175,7 @@ public class Plateau {
 				
 		for (byte lg = 0; lg < this.plateau.length; lg++) {
 			for (byte col = 0; col < this.plateau[lg].length; col++) {
-				if (this.plateau[lg][col].ordinal() == Piece.AUCUN.ordinal()) {
+				if (this.plateau[lg][col].ordinal() == Piece.AUCUNE.ordinal()) {
 					continue;
 				}
 				

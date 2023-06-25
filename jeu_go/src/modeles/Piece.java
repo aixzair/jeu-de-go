@@ -1,7 +1,7 @@
 package modeles;
 
 public enum Piece {
-	AUCUN,
+	AUCUNE,
 	NOIR,
 	BLANC;
 	

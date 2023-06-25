@@ -26,6 +26,5 @@ public class Partie {
 		}*/
 		
 		this.ihm.afficher();
-		this.plateau.afficherGroupesEtoure();
 	}
 }
