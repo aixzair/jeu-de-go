@@ -19,6 +19,8 @@ public class Plateau {
 	private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
 	private int tourJoueur = 1;
 	private Joueur gagnant;
+	
+	private int tour = 0;
 
 	/**
 	 * Créé un plateau de jeu
@@ -126,11 +128,20 @@ public class Plateau {
 		return this.joueurs.get(this.tourJoueur);
 	}
 	
-	public void jouer(Coordonnee coordonnee)
+	/**
+	 * Pose la pièce et commence un nouveau tour
+	 * @param coordonnee
+	 * @throws CaseNonVideException : si il y a déjà une pièce sur la case
+	 */
+	public void poserPiece(Coordonnee coordonnee)
 	throws CaseNonVideException {
 		if (this.plateau[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
 			throw new CaseNonVideException();
 		}
+		
+		this.plateau[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+		
+		this.nouveauTour();
 	}
 	
 	// -------------- Fonctions privées --------------
@@ -329,5 +340,9 @@ public class Plateau {
 		}
 		
 		return false;
+	}
+	
+	private void nouveauTour() {
+		
 	}
 }
