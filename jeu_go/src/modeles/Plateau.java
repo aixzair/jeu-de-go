@@ -76,9 +76,13 @@ public class Plateau {
 		return this.plateau;
 	}
 	
-	// -------------- Setters --------------
-
-	
+	/**
+	 * Renvoie le numéro du tour en cours.
+	 * @return le numéro du tour en cours.
+	 */
+	public int getTour() {
+		return this.tour;
+	}
 	
 	// -------------- Fonctions publiques --------------
 	
@@ -355,7 +359,11 @@ public class Plateau {
 		this.joueurActuel = 1 - this.joueurActuel;
 	}
 	
+	/**
+	 * Créé un nouveau tour.
+	 */
 	private void nouveauTour() {
-		
+		this.nextJoueur();
+		this.tour++;
 	}
 }
