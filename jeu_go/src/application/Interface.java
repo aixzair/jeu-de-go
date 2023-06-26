@@ -2,16 +2,18 @@ package application;
 
 import java.util.Scanner;
 
+import modeles.Joueur;
 import modeles.Piece;
 
 /** 
  * @author Alexandre Lerosier
  */
 public class Interface {
-	private Partie partie;
 	private static final String BLANC = "B";
 	private static final String NOIR = "N";
 	private static final String VIDE = " ";
+	
+	private Partie partie;
 	
 	// ----------- Méthodes publiques de classe -----------
 	
@@ -78,5 +80,11 @@ public class Interface {
 	
 	public void afficher() {
 		Interface.afficher(this.partie.getPlateau().getPlateau());
+	}
+	
+	public void demanderCoordonnee() {
+		Joueur joueur = this.partie.getPlateau().getJoueurActuel();
+		
+		
 	}
 }
