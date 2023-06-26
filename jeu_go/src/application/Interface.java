@@ -2,7 +2,7 @@ package application;
 
 import java.util.Scanner;
 
-import modeles.Joueur;
+import modeles.Coordonnee;
 import modeles.Piece;
 
 /** 
@@ -87,22 +87,24 @@ public class Interface {
 	
 	/**
 	 * Demande une coordonnée.
+	 * @return coordonnée
 	 */
-	public void demanderCoordonnee() {
-		Joueur joueur = this.partie.getPlateau().getJoueurActuel();
+	public Coordonnee demanderCoordonnee() {
 		int y;
 		int x;
 		
-		System.out.print("En quelle ligne voullez-vous jouer ? ");
-		
 		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.print("En quelle ligne voullez-vous jouer ? ");
 			y = scanner.nextInt() - 1;
-		}
-		
-		System.out.print("En quelle colonne voullez-vous jouer ? ");
-		
-		try (Scanner scanner = new Scanner(System.in)) {
+			
+			System.out.print("En quelle colonne voullez-vous jouer ? ");
 			x = scanner.nextInt() - 1;
 		}
+		
+		return new Coordonnee (
+				y,
+				x,
+				this.partie.getPlateau().getJoueurActuel().getCouleur()
+			);
 	}
 }
