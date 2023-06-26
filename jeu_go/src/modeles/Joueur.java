@@ -17,11 +17,21 @@ public class Joueur {
 	// -- Setter protected --
 	
 	/**
-	 * Chnage la couleur du joueur.
+	 * Change la couleur du joueur.
 	 * @param couleur
 	 */
 	protected void setCouleur(Piece couleur) {
 		this.couleur = couleur;
+	}
+	
+	// --------------- Getters ---------------
+	
+	/**
+	 * Renvoie la couleur du joueur
+	 * @return la couleur du joueur
+	 */
+	public Piece getCouleur() {
+		return this.couleur;
 	}
 
 }

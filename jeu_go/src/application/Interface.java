@@ -78,13 +78,31 @@ public class Interface {
 	
 	// ----------- Méthodes publiques -----------
 	
+	/**
+	 * Affiche le plateau.
+	 */
 	public void afficher() {
 		Interface.afficher(this.partie.getPlateau().getPlateau());
 	}
 	
+	/**
+	 * Demande une coordonnée.
+	 */
 	public void demanderCoordonnee() {
 		Joueur joueur = this.partie.getPlateau().getJoueurActuel();
+		int y;
+		int x;
 		
+		System.out.print("En quelle ligne voullez-vous jouer ? ");
 		
+		try (Scanner scanner = new Scanner(System.in)) {
+			y = scanner.nextInt() - 1;
+		}
+		
+		System.out.print("En quelle colonne voullez-vous jouer ? ");
+		
+		try (Scanner scanner = new Scanner(System.in)) {
+			x = scanner.nextInt() - 1;
+		}
 	}
 }
