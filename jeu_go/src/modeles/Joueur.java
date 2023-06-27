@@ -6,10 +6,10 @@ public class Joueur {
 
 	/**
 	 * Créer un joueur avec un prenom.
-	 * @param prenom
+	 * @param prenom du joueur
 	 */
-	public Joueur(String _prenom) {
-		this.prenom = _prenom;
+	public Joueur(String prenom) {
+		this.prenom = prenom;
 	}
 	
 	// --------------- Setters ---------------

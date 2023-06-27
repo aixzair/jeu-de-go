@@ -3,6 +3,7 @@ package application;
 import java.util.Scanner;
 
 import modeles.Coordonnee;
+import modeles.Joueur;
 import modeles.Piece;
 
 /** 
@@ -102,9 +103,25 @@ public class Interface {
 		}
 		
 		return new Coordonnee (
-				y,
-				x,
-				this.partie.getPlateau().getJoueurActuel().getCouleur()
-			);
+			y,
+			x,
+			this.partie.getPlateau().getJoueurActuel().getCouleur()
+		);
+	}
+	
+	/**
+	 * Demande un joueur à l'utilisateur
+	 * @param numero du joueur
+	 * @return joueur
+	 */
+	public Joueur demanderJoueur(int numero) {
+		String prenom;
+		
+		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.print("Entré le prénom du joueur " + numero + " : ");
+			prenom = scanner.next();
+		}
+		
+		return new Joueur(prenom);
 	}
 }
