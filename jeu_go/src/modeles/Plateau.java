@@ -10,7 +10,7 @@ import application.Interface;
  */
 public class Plateau {
 	private final byte taille = 3;
-	private Piece[][] plateau = new Piece[this.taille][this.taille];
+	private Piece[][] pieces = new Piece[this.taille][this.taille];
 	
 	private ArrayList<ArrayList<Coordonnee>> groupes;
 	private ArrayList<ArrayList<Coordonnee>> groupesEntrourer;
@@ -22,9 +22,12 @@ public class Plateau {
 	private int tour = 0;
 
 	/**
-	 * Créé un plateau de jeu
+	 * Créé un pieces de jeu
 	 */
 	public Plateau(Joueur joueur1, Joueur joueur2) {
+		joueur1.setCouleur(Piece.BLANC);
+		joueur2.setCouleur(Piece.NOIR);
+		
 		this.joueurs.add(joueur1);
 		this.joueurs.add(joueur2);
 		
@@ -42,14 +45,14 @@ public class Plateau {
 	 */
 	public boolean estCaseLibre(final int lg, final int col) {
 		if (lg < 0
-		|| lg >= this.plateau.length) {
+		|| lg >= this.pieces.length) {
 			return false;
 		} else if (col < 0
-		|| col >= this.plateau[lg].length) {
+		|| col >= this.pieces[lg].length) {
 			return false;
 		}
 		
-		return this.plateau[lg][col] == Piece.AUCUNE;
+		return this.pieces[lg][col] == Piece.AUCUNE;
 	}
 	
 	/**
@@ -62,7 +65,7 @@ public class Plateau {
 	}
 	
 	/**
-	 * Renvoie la taille du plateau
+	 * Renvoie la taille du pieces
 	 * @return taille
 	 */
 	public byte getTaille() {
@@ -79,11 +82,11 @@ public class Plateau {
 	
 	
 	/**
-	 * Renvoie le plateau de jeu
+	 * Renvoie le pieces de jeu
 	 * @return
 	 */
-	public Piece[][] getPlateau() {
-		return this.plateau;
+	public Piece[][] getPieces() {
+		return this.pieces;
 	}
 	
 	/**
@@ -97,14 +100,14 @@ public class Plateau {
 	// -------------- Fonctions publiques --------------
 	
 	/**
-	 * Affiche les groupes de pion du plateau
+	 * Affiche les groupes de pion du pieces
 	 */
 	public void afficherGroupes() {
 		Piece plateauGroupe[][];		
 		this.trouverGroupes();
 		
 		for (ArrayList<Coordonnee> groupe : this.groupes) {
-			plateauGroupe = new Piece[this.plateau.length][this.plateau.length];
+			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
 			
 			for (Coordonnee coordonnee : groupe) {
 				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
@@ -115,7 +118,7 @@ public class Plateau {
 	}
 	
 	/**
-	 * Affiche les groupes de pion entourés de pion du plateau
+	 * Affiche les groupes de pion entourés de pion du pieces
 	 */
 	public void afficherGroupesEtoure() {
 		Piece plateauGroupe[][];	
@@ -123,7 +126,7 @@ public class Plateau {
 		this.trouverGroupesEntoure();
 		
 		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
-			plateauGroupe = new Piece[this.plateau.length][this.plateau.length];
+			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
 			
 			for (Coordonnee coordonnee : groupe) {
 				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
@@ -148,11 +151,11 @@ public class Plateau {
 	 */
 	public void poserPiece(Coordonnee coordonnee)
 	throws CaseNonVideException {
-		if (this.plateau[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
+		if (this.pieces[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
 			throw new CaseNonVideException();
 		}
 		
-		this.plateau[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+		this.pieces[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
 		
 		this.nouveauTour();
 	}
@@ -167,35 +170,35 @@ public class Plateau {
 	// -------------- Fonctions privées --------------
 	
 	/**
-	 * Met les cases du plateau à Piece.VIDE
+	 * Met les cases du pieces à Piece.VIDE
 	 */
 	private void initialisation() {
-		for (byte lg = 0; lg < this.plateau.length; lg++) {
-			for (byte col = 0; col < this.plateau[lg].length; col++) {
-				this.plateau[lg][col] = Piece.AUCUNE;
+		for (byte lg = 0; lg < this.pieces.length; lg++) {
+			for (byte col = 0; col < this.pieces[lg].length; col++) {
+				this.pieces[lg][col] = Piece.AUCUNE;
 			}
 		}
 	}
 	
 	/**
-	 * Remplit aléatoirement le plateau
+	 * Remplit aléatoirement le pieces
 	 */
 	private void remplissageAleatoire() {
 		Random random = new Random();
 		
-		for (byte lg = 0; lg < this.plateau.length; lg++) {
-			for (byte col = 0; col < this.plateau.length; col++) {
+		for (byte lg = 0; lg < this.pieces.length; lg++) {
+			for (byte col = 0; col < this.pieces.length; col++) {
 				switch(random.nextInt(3)) {
-				case 0: this.plateau[lg][col] = Piece.AUCUNE; break;
-				case 1: this.plateau[lg][col] = Piece.BLANC; break;
-				case 2: this.plateau[lg][col] = Piece.NOIR; break;
+				case 0: this.pieces[lg][col] = Piece.AUCUNE; break;
+				case 1: this.pieces[lg][col] = Piece.BLANC; break;
+				case 2: this.pieces[lg][col] = Piece.NOIR; break;
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Trouve les groupes de pion sur le plateau et les ajoute à une liste
+	 * Trouve les groupes de pion sur le pieces et les ajoute à une liste
 	 */
 	private void trouverGroupes() {
 		Coordonnee pion;
@@ -204,13 +207,13 @@ public class Plateau {
 		int pionsIterateur;
 		this.groupes = new ArrayList<ArrayList<Coordonnee>>();
 				
-		for (byte lg = 0; lg < this.plateau.length; lg++) {
-			for (byte col = 0; col < this.plateau[lg].length; col++) {
-				if (this.plateau[lg][col].ordinal() == Piece.AUCUNE.ordinal()) {
+		for (byte lg = 0; lg < this.pieces.length; lg++) {
+			for (byte col = 0; col < this.pieces[lg].length; col++) {
+				if (this.pieces[lg][col].ordinal() == Piece.AUCUNE.ordinal()) {
 					continue;
 				}
 				
-				pion = new Coordonnee(col, lg, this.plateau[lg][col]);				
+				pion = new Coordonnee(col, lg, this.pieces[lg][col]);				
 				
 				if (this.estInclus(this.groupes, pion)) {
 					continue;
@@ -228,7 +231,7 @@ public class Plateau {
 						autrePion = new Coordonnee(
 							pion.getX(),
 							pion.getY() - 1,
-							this.plateau[pion.getY() - 1][pion.getX()]
+							this.pieces[pion.getY() - 1][pion.getX()]
 						);
 						
 						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
@@ -238,11 +241,11 @@ public class Plateau {
 					}
 					
 					// Coordonnee au dessous
-					if (pion.getY() + 1 < this.plateau.length) {
+					if (pion.getY() + 1 < this.pieces.length) {
 						autrePion = new Coordonnee(
 							pion.getX(),
 							pion.getY() + 1,
-							this.plateau[pion.getY() + 1][pion.getX()]
+							this.pieces[pion.getY() + 1][pion.getX()]
 						);
 						
 						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
@@ -256,7 +259,7 @@ public class Plateau {
 						autrePion = new Coordonnee(
 							pion.getX() - 1,
 							pion.getY(),
-							this.plateau[pion.getY()][pion.getX() - 1]
+							this.pieces[pion.getY()][pion.getX() - 1]
 						);
 						
 						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
@@ -266,11 +269,11 @@ public class Plateau {
 					}
 					
 					// Coordonnee à droite
-					if (pion.getX() + 1 < this.plateau[lg].length) {
+					if (pion.getX() + 1 < this.pieces[lg].length) {
 						autrePion = new Coordonnee(
 							pion.getX() + 1,
 							pion.getY(),
-							this.plateau[pion.getY()][pion.getX() + 1]
+							this.pieces[pion.getY()][pion.getX() + 1]
 						);
 						
 						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
@@ -312,15 +315,15 @@ public class Plateau {
 			
 			// Haut
 			if (coordonnee.getY() != 0) {
-				if (this.plateau[coordonnee.getY() - 1][coordonnee.getX()].ordinal()
+				if (this.pieces[coordonnee.getY() - 1][coordonnee.getX()].ordinal()
 				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
 					return false;
 				}
 			}
 			
 			// Bas
-			if (coordonnee.getY() != this.plateau.length - 1) {
-				if (this.plateau[coordonnee.getY() + 1][coordonnee.getX()].ordinal()
+			if (coordonnee.getY() != this.pieces.length - 1) {
+				if (this.pieces[coordonnee.getY() + 1][coordonnee.getX()].ordinal()
 				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
 					return false;
 				}
@@ -328,15 +331,15 @@ public class Plateau {
 			
 			// Gauche
 			if (coordonnee.getX() != 0) {
-				if (this.plateau[coordonnee.getY()][coordonnee.getX() - 1].ordinal()
+				if (this.pieces[coordonnee.getY()][coordonnee.getX() - 1].ordinal()
 				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
 					return false;
 				}
 			}
 			
 			// Droite
-			if (coordonnee.getX() != this.plateau.length - 1) {
-				if (this.plateau[coordonnee.getY()][coordonnee.getX() + 1].ordinal()
+			if (coordonnee.getX() != this.pieces.length - 1) {
+				if (this.pieces[coordonnee.getY()][coordonnee.getX() + 1].ordinal()
 				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
 					return false;
 				}

@@ -106,7 +106,7 @@ public class Interface {
 	 * Affiche le plateau.
 	 */
 	public void afficher() {
-		Interface.afficher(this.partie.getPlateau().getPlateau());
+		Interface.afficher(this.partie.getPlateau().getPieces());
 	}
 	
 	/**
@@ -125,8 +125,8 @@ public class Interface {
 		x = scanner.nextInt() - 1;
 		
 		return new Coordonnee (
-			y,
 			x,
+			y,
 			this.partie.getPlateau().getJoueurActuel().getCouleur()
 		);
 	}

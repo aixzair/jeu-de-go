@@ -15,9 +15,7 @@ public class Partie {
 	public Partie() {
 		Joueur joueur1 = Interface.demanderJoueur(1);
 		Joueur joueur2 = Interface.demanderJoueur(2);
-		
-		System.out.println("a");
-		
+
 		this.plateau = new Plateau(joueur1, joueur2);
 		this.ihm = new Interface(this);
 	}
@@ -27,11 +25,11 @@ public class Partie {
 	}
 	
 	public void jouer() {
-		System.out.println("b");
-		
 		while (!this.plateau.estTerminee()) {
 			Coordonnee coup;
 			
+			System.out.println("");
+			System.out.println("");
 			this.ihm.afficher();
 			
 			coup = this.ihm.demanderCoordonnee();
