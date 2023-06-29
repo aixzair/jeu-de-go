@@ -40,7 +40,15 @@ public class Plateau {
 	 * @param col
 	 * @return boolean
 	 */
-	public boolean estCaseLibre(int lg, int col) {
+	public boolean estCaseLibre(final int lg, final int col) {
+		if (lg < 0
+		|| lg >= this.plateau.length) {
+			return false;
+		} else if (col < 0
+		|| col >= this.plateau[lg].length) {
+			return false;
+		}
+		
 		return this.plateau[lg][col] == Piece.AUCUNE;
 	}
 	
