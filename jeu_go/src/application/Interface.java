@@ -52,9 +52,32 @@ public class Interface {
 		}
 	}
 	
+	/**
+	 * Demande un joueur à l'utilisateur
+	 * @param numero du joueur
+	 * @return joueur
+	 */
+	public static Joueur demanderJoueur(int numero) {
+		Scanner scanner = new Scanner(System.in);
+		String prenom;
+		
+		System.out.print("Entré le prénom du joueur " + numero + " : ");
+		prenom = scanner.next();
+				
+		return new Joueur(prenom);
+	}
+	
+	/**
+	 * Affiche un message
+	 * @param message
+	 */
+	public static void message(final String message) {
+		System.out.println(message);
+	}
+	
 	// ----------- Méthodes privées de classe -----------
 	
-	private static void afficherLigne(int longueur) {
+	private static void afficherLigne(final int longueur) {
 		for (byte i = 0; i < longueur; i++) {
 			System.out.print("-");
 		}
@@ -91,37 +114,20 @@ public class Interface {
 	 * @return coordonnée
 	 */
 	public Coordonnee demanderCoordonnee() {
+		Scanner scanner = new Scanner(System.in);
 		int y;
 		int x;
 		
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.print("En quelle ligne voullez-vous jouer ? ");
-			y = scanner.nextInt() - 1;
-			
-			System.out.print("En quelle colonne voullez-vous jouer ? ");
-			x = scanner.nextInt() - 1;
-		}
+		System.out.print("En quelle ligne voullez-vous jouer ? ");
+		y = scanner.nextInt() - 1;
+		
+		System.out.print("En quelle colonne voullez-vous jouer ? ");
+		x = scanner.nextInt() - 1;
 		
 		return new Coordonnee (
 			y,
 			x,
 			this.partie.getPlateau().getJoueurActuel().getCouleur()
 		);
-	}
-	
-	/**
-	 * Demande un joueur à l'utilisateur
-	 * @param numero du joueur
-	 * @return joueur
-	 */
-	public Joueur demanderJoueur(int numero) {
-		String prenom;
-		
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.print("Entré le prénom du joueur " + numero + " : ");
-			prenom = scanner.next();
-		}
-		
-		return new Joueur(prenom);
 	}
 }

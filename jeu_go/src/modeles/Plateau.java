@@ -15,7 +15,7 @@ public class Plateau {
 	private ArrayList<ArrayList<Coordonnee>> groupes;
 	private ArrayList<ArrayList<Coordonnee>> groupesEntrourer;
 
-	private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
+	private ArrayList<Joueur> joueurs = new ArrayList<Joueur>(2);
 	private int joueurActuel;
 	private Joueur gagnant;
 	
@@ -24,7 +24,10 @@ public class Plateau {
 	/**
 	 * Créé un plateau de jeu
 	 */
-	public Plateau() {
+	public Plateau(Joueur joueur1, Joueur joueur2) {
+		this.joueurs.add(joueur1);
+		this.joueurs.add(joueur2);
+		
 		this.initialisation();
 		// this.remplissageAleatoire();
 	}
@@ -63,7 +66,7 @@ public class Plateau {
 	 * @return si la partie est terminée
 	 */
 	public boolean estTerminee() {
-		return this.gagnant == null;
+		return this.gagnant != null;
 	}
 	
 	
