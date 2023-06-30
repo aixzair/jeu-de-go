@@ -56,6 +56,14 @@ public class Plateau {
 	}
 	
 	/**
+	 * Renvoie le joueur actuel.
+	 * @return le joueur actuel
+	 */
+	public Joueur getJoueurActuel() {
+		return this.joueurs.get(this.joueurActuel);
+	}
+	
+	/**
 	 * Renvoie le joueur gagnant
 	 * @return null : pas de gagant
 	 * @return Joueur : gagnant
@@ -147,14 +155,6 @@ public class Plateau {
 	}
 	
 	/**
-	 * Renvoie le joueur actuel.
-	 * @return le joueur actuel
-	 */
-	public Joueur getJoueurActuel() {
-		return this.joueurs.get(this.joueurActuel);
-	}
-	
-	/**
 	 * Pose la pièce et commence un nouveau tour
 	 * @param coordonnee
 	 * @throws CaseNonVideException : si il y a déjà une pièce sur la case
@@ -165,7 +165,7 @@ public class Plateau {
 			throw new CaseNonVideException();
 		}
 		
-		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
+		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
 		
 		this.nouveauTour();
 	}
