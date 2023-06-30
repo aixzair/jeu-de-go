@@ -33,5 +33,13 @@ public class Joueur {
 	public Piece getCouleur() {
 		return this.couleur;
 	}
+	
+	/**
+	 * Renvoie le prenom du joueur
+	 * @return le prenom du joueur
+	 */
+	public String getPrenom() {
+		return this.prenom;
+	}
 
 }
