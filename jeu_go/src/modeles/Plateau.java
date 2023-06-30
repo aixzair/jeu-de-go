@@ -20,6 +20,7 @@ public class Plateau {
 	private Joueur gagnant;
 	
 	private int tour = 0;
+	private int scores[] = new int[2]; // 0 : Blanc, 1 : Noir
 
 	/**
 	 * Créé un pieces de jeu
@@ -167,6 +168,7 @@ public class Plateau {
 		
 		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
 		
+		this.finTour();
 		this.nouveauTour();
 	}
 	
@@ -208,21 +210,94 @@ public class Plateau {
 	}
 	
 	/**
+	 * Indique si les deux coordonnee pointent vers une Piece identique
+	 * @param pion
+	 * @param autrePion
+	 * @return true : Piece identique
+	 */
+	private boolean memePiece(Coordonnee pion, Coordonnee autrePion) {
+		return this.getPiece(pion.getX(), pion.getY()).ordinal()
+			== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal();
+	}
+	
+	/**
+	 * Remplie le groupe de pion
+	 * @param pions
+	 * @param lg
+	 */
+	private void remplirGroupe(ArrayList<Coordonnee> pions, int lg) {
+		Coordonnee pion;
+		Coordonnee autrePion;
+		
+		for (int i = 0; i < pions.size(); i++) {
+			pion = pions.get(i);
+			
+			// Pion au dessus
+			if (pion.getY() - 1 >= 0) {
+				autrePion = new Coordonnee(
+					pion.getX(),
+					pion.getY() - 1
+				);
+				
+				if (this.memePiece(pion, autrePion)
+				&& !pions.contains(autrePion)) {
+					pions.add(autrePion);
+				}
+			}
+			
+			// Pion au dessous
+			if (pion.getY() + 1 < this.pieces.length) {
+				autrePion = new Coordonnee(
+					pion.getX(),
+					pion.getY() + 1
+				);
+				
+				if (this.memePiece(pion, autrePion)
+				&& !pions.contains(autrePion)) {
+					pions.add(autrePion);
+				}
+			}
+			
+			// Pion à gauche
+			if (pion.getX() - 1 >= 0) {
+				autrePion = new Coordonnee(
+					pion.getX() - 1,
+					pion.getY()
+				);
+				
+				if (this.memePiece(pion, autrePion)
+				&& !pions.contains(autrePion)) {
+					pions.add(autrePion);
+				}
+			}
+			
+			// Pion à droite
+			if (pion.getX() + 1 < this.pieces[lg].length) {
+				autrePion = new Coordonnee(
+					pion.getX() + 1,
+					pion.getY()
+				);
+				
+				if (this.memePiece(pion, autrePion)
+				&& !pions.contains(autrePion)) {
+					pions.add(autrePion);
+
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Trouve les groupes de pion sur le pieces et les ajoute à une liste
 	 */
 	private void trouverGroupes() {
 		Coordonnee pion;
-		Coordonnee autrePion;
 		ArrayList<Coordonnee> pions;
-		int pionsIterateur;
+
 		this.groupes = new ArrayList<ArrayList<Coordonnee>>();
 				
 		for (byte lg = 0; lg < this.pieces.length; lg++) {
 			for (byte col = 0; col < this.pieces[lg].length; col++) {
-				if (this.pieces[lg][col].ordinal() == Piece.AUCUNE.ordinal()) {
-					continue;
-				}
-				
 				pion = new Coordonnee(col, lg);				
 				
 				if (this.estInclus(this.groupes, pion)) {
@@ -233,66 +308,7 @@ public class Plateau {
 				pions = new ArrayList<Coordonnee>();
 				pions.add(pion);
 				
-				for (pionsIterateur = 0; pionsIterateur < pions.size(); pionsIterateur++) {
-					pion = pions.get(pionsIterateur);
-					
-					// Coordonnee au dessus
-					if (pion.getY() - 1 >= 0) {
-						autrePion = new Coordonnee(
-							pion.getX(),
-							pion.getY() - 1
-						);
-						
-						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
-						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
-						&& !pions.contains(autrePion)) {
-							pions.add(autrePion);
-						}
-					}
-					
-					// Coordonnee au dessous
-					if (pion.getY() + 1 < this.pieces.length) {
-						autrePion = new Coordonnee(
-							pion.getX(),
-							pion.getY() + 1
-						);
-						
-						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
-						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
-						&& !pions.contains(autrePion)) {
-							pions.add(autrePion);
-						}
-					}
-					
-					// Coordonnee à gauche
-					if (pion.getX() - 1 >= 0) {
-						autrePion = new Coordonnee(
-							pion.getX() - 1,
-							pion.getY()
-						);
-						
-						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
-						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
-						&& !pions.contains(autrePion)) {
-							pions.add(autrePion);
-						}
-					}
-					
-					// Coordonnee à droite
-					if (pion.getX() + 1 < this.pieces[lg].length) {
-						autrePion = new Coordonnee(
-							pion.getX() + 1,
-							pion.getY()
-						);
-						
-						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
-						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
-						&& !pions.contains(autrePion)) {
-							pions.add(autrePion);
-
-						}
-					}
-				}
+				this.remplirGroupe(pions, lg);
 				
 				this.groupes.add(pions);
 			}
@@ -380,6 +396,28 @@ public class Plateau {
 	 */
 	private void nextJoueur() {
 		this.joueurActuel = 1 - this.joueurActuel;
+	}
+	
+	/**
+	 * Modifie le plateau en fonction de pion posée
+	 */
+	private void finTour() {
+		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
+		this.trouverGroupesEntoure();
+		
+		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
+			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
+				continue;
+			}
+			
+			for (Coordonnee coordonnee : groupe) {
+				this.scores[1 - this.joueurActuel]--;
+				this.pieces[coordonnee.getY()][coordonnee.getX()] = Piece.AUCUNE;
+			}
+		}
+		
+		this.groupes = null;
+		this.groupesEntrourer = null;
 	}
 	
 	/**
