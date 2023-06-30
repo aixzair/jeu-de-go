@@ -124,10 +124,6 @@ public class Interface {
 		System.out.print("En quelle colonne voullez-vous jouer ? ");
 		x = scanner.nextInt() - 1;
 		
-		return new Coordonnee (
-			x,
-			y,
-			this.partie.getPlateau().getJoueurActuel().getCouleur()
-		);
+		return new Coordonnee(x, y);
 	}
 }
