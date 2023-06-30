@@ -3,7 +3,6 @@ package modeles;
 import java.util.Objects;
 
 public class Coordonnee {
-	private Piece piece;
 	private int x;
 	private int y;
 
@@ -12,15 +11,14 @@ public class Coordonnee {
 	 * @param y
 	 * @param piece
 	 */
-	public Coordonnee(int x, int y, Piece piece) {
-		this.piece = piece;
+	public Coordonnee(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.piece, this.x, this.y);
+		return Objects.hash(this.x, this.y);
 	}
 
 	@Override
@@ -35,26 +33,17 @@ public class Coordonnee {
 		
 		Coordonnee other = (Coordonnee) obj;
 		
-		return this.piece == other.piece
-			   && this.x == other.x
+		return this.x == other.x
 			   && this.y == other.y;
 	}
 	
 	@Override
 	public String toString() {
 		return "x : " + this.x
-			    + "; y : " + this.y
-			    + "; " + this.piece;
+			    + "; y : " + this.y;
 	}
 	
 	// ------------ Getters ------------
-
-	/** Renvoi l'piece
-	 * @return the piece
-	 */
-	public Piece getPiece() {
-		return this.piece;
-	}
 
 	/** Renvoi la propriété x
 	 * @return the x

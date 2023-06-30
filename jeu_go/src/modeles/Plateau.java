@@ -80,6 +80,16 @@ public class Plateau {
 		return this.gagnant != null;
 	}
 	
+	/**
+	 * Renvoie la pièce sur le plateau
+	 * @param x : colonne
+	 * @param y : ligne
+	 * @return la pièce 
+	 */
+	public Piece getPiece(int x, int y) {
+		return this.pieces[y][x];
+	}
+	
 	
 	/**
 	 * Renvoie le pieces de jeu
@@ -110,7 +120,7 @@ public class Plateau {
 			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
 			
 			for (Coordonnee coordonnee : groupe) {
-				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
 			}
 			
 			Interface.afficher(plateauGroupe);
@@ -129,7 +139,7 @@ public class Plateau {
 			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
 			
 			for (Coordonnee coordonnee : groupe) {
-				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
 			}
 			
 			Interface.afficher(plateauGroupe);
@@ -155,7 +165,7 @@ public class Plateau {
 			throw new CaseNonVideException();
 		}
 		
-		this.pieces[coordonnee.getY()][coordonnee.getX()] = coordonnee.getPiece();
+		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
 		
 		this.nouveauTour();
 	}
@@ -213,7 +223,7 @@ public class Plateau {
 					continue;
 				}
 				
-				pion = new Coordonnee(col, lg, this.pieces[lg][col]);				
+				pion = new Coordonnee(col, lg);				
 				
 				if (this.estInclus(this.groupes, pion)) {
 					continue;
@@ -230,11 +240,11 @@ public class Plateau {
 					if (pion.getY() - 1 >= 0) {
 						autrePion = new Coordonnee(
 							pion.getX(),
-							pion.getY() - 1,
-							this.pieces[pion.getY() - 1][pion.getX()]
+							pion.getY() - 1
 						);
 						
-						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
+						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
+						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -244,11 +254,11 @@ public class Plateau {
 					if (pion.getY() + 1 < this.pieces.length) {
 						autrePion = new Coordonnee(
 							pion.getX(),
-							pion.getY() + 1,
-							this.pieces[pion.getY() + 1][pion.getX()]
+							pion.getY() + 1
 						);
 						
-						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
+						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
+						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -258,11 +268,11 @@ public class Plateau {
 					if (pion.getX() - 1 >= 0) {
 						autrePion = new Coordonnee(
 							pion.getX() - 1,
-							pion.getY(),
-							this.pieces[pion.getY()][pion.getX() - 1]
+							pion.getY()
 						);
 						
-						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
+						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
+						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 						}
@@ -272,11 +282,11 @@ public class Plateau {
 					if (pion.getX() + 1 < this.pieces[lg].length) {
 						autrePion = new Coordonnee(
 							pion.getX() + 1,
-							pion.getY(),
-							this.pieces[pion.getY()][pion.getX() + 1]
+							pion.getY()
 						);
 						
-						if (pion.getPiece().ordinal() == autrePion.getPiece().ordinal()
+						if (this.getPiece(pion.getX(), pion.getY()).ordinal()
+						== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal()
 						&& !pions.contains(autrePion)) {
 							pions.add(autrePion);
 
@@ -316,7 +326,7 @@ public class Plateau {
 			// Haut
 			if (coordonnee.getY() != 0) {
 				if (this.pieces[coordonnee.getY() - 1][coordonnee.getX()].ordinal()
-				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
 					return false;
 				}
 			}
@@ -324,7 +334,7 @@ public class Plateau {
 			// Bas
 			if (coordonnee.getY() != this.pieces.length - 1) {
 				if (this.pieces[coordonnee.getY() + 1][coordonnee.getX()].ordinal()
-				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
 					return false;
 				}
 			}
@@ -332,7 +342,7 @@ public class Plateau {
 			// Gauche
 			if (coordonnee.getX() != 0) {
 				if (this.pieces[coordonnee.getY()][coordonnee.getX() - 1].ordinal()
-				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
 					return false;
 				}
 			}
@@ -340,7 +350,7 @@ public class Plateau {
 			// Droite
 			if (coordonnee.getX() != this.pieces.length - 1) {
 				if (this.pieces[coordonnee.getY()][coordonnee.getX() + 1].ordinal()
-				!= Piece.getOpposer(coordonnee.getPiece()).ordinal()) {
+				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
 					return false;
 				}
 			}
