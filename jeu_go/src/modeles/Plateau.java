@@ -342,7 +342,7 @@ public class Plateau {
 			// Haut
 			if (coordonnee.getY() != 0) {
 				if (this.pieces[coordonnee.getY() - 1][coordonnee.getX()].ordinal()
-				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
+				== Piece.AUCUNE.ordinal()) {
 					return false;
 				}
 			}
@@ -350,7 +350,7 @@ public class Plateau {
 			// Bas
 			if (coordonnee.getY() != this.pieces.length - 1) {
 				if (this.pieces[coordonnee.getY() + 1][coordonnee.getX()].ordinal()
-				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
+				== Piece.AUCUNE.ordinal()) {
 					return false;
 				}
 			}
@@ -358,7 +358,7 @@ public class Plateau {
 			// Gauche
 			if (coordonnee.getX() != 0) {
 				if (this.pieces[coordonnee.getY()][coordonnee.getX() - 1].ordinal()
-				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
+				== Piece.AUCUNE.ordinal()) {
 					return false;
 				}
 			}
@@ -366,7 +366,7 @@ public class Plateau {
 			// Droite
 			if (coordonnee.getX() != this.pieces.length - 1) {
 				if (this.pieces[coordonnee.getY()][coordonnee.getX() + 1].ordinal()
-				!= Piece.getOpposer(this.getPiece(coordonnee.getX(), coordonnee.getY())).ordinal()) {
+				== Piece.AUCUNE.ordinal()) {
 					return false;
 				}
 			}
@@ -399,9 +399,11 @@ public class Plateau {
 	}
 	
 	/**
-	 * Modifie le plateau en fonction de pion posée
+	 * Enlève les pieces adverse entourées
 	 */
 	private void finTour() {
+		System.out.println("A");
+		
 		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
 		this.trouverGroupesEntoure();
 		
@@ -409,6 +411,8 @@ public class Plateau {
 			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
 				continue;
 			}
+			
+			System.out.println("B");
 			
 			for (Coordonnee coordonnee : groupe) {
 				this.scores[1 - this.joueurActuel]--;
