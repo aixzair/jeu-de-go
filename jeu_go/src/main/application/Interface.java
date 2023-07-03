@@ -2,16 +2,19 @@ package application;
 
 import java.util.Scanner;
 
+import modeles.Coordonnee;
+import modeles.Joueur;
 import modeles.Piece;
 
 /** 
  * @author Alexandre Lerosier
  */
 public class Interface {
-	private Partie partie;
 	private static final String BLANC = "B";
 	private static final String NOIR = "N";
 	private static final String VIDE = " ";
+	
+	private Partie partie;
 	
 	// ----------- Méthodes publiques de classe -----------
 	
@@ -49,9 +52,32 @@ public class Interface {
 		}
 	}
 	
+	/**
+	 * Demande un joueur à l'utilisateur
+	 * @param numero du joueur
+	 * @return joueur
+	 */
+	public static Joueur demanderJoueur(int numero) {
+		Scanner scanner = new Scanner(System.in);
+		String prenom;
+		
+		System.out.print("Entré le prénom du joueur " + numero + " : ");
+		prenom = scanner.next();
+				
+		return new Joueur(prenom);
+	}
+	
+	/**
+	 * Affiche un message
+	 * @param message
+	 */
+	public static void message(final String message) {
+		System.out.println(message);
+	}
+	
 	// ----------- Méthodes privées de classe -----------
 	
-	private static void afficherLigne(int longueur) {
+	private static void afficherLigne(final int longueur) {
 		for (byte i = 0; i < longueur; i++) {
 			System.out.print("-");
 		}
@@ -76,7 +102,28 @@ public class Interface {
 	
 	// ----------- Méthodes publiques -----------
 	
+	/**
+	 * Affiche le plateau.
+	 */
 	public void afficher() {
-		Interface.afficher(this.partie.getPlateau().getPlateau());
+		Interface.afficher(this.partie.getPlateau().getPieces());
+	}
+	
+	/**
+	 * Demande une coordonnée.
+	 * @return coordonnée
+	 */
+	public Coordonnee demanderCoordonnee() {
+		Scanner scanner = new Scanner(System.in);
+		int y;
+		int x;
+		
+		System.out.print("En quelle ligne voullez-vous jouer ? ");
+		y = scanner.nextInt() - 1;
+		
+		System.out.print("En quelle colonne voullez-vous jouer ? ");
+		x = scanner.nextInt() - 1;
+		
+		return new Coordonnee(x, y);
 	}
 }
