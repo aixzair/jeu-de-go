@@ -1,6 +1,3 @@
-/**
- * 
- */
 package modeles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +14,7 @@ class PieceTest {
 	 * Test method for {@link modeles.Piece#getOpposer(modeles.Piece)}.
 	 */
 	@Test
-	void testGetOpposer() {
+	public void testGetOpposer() {
 		assertNull(Piece.getOpposer(null));
 		assertNull(Piece.getOpposer(Piece.AUCUNE));
 		

@@ -19,7 +19,7 @@ public class Plateau {
 	private int joueurActuel;
 	private Joueur gagnant;
 	
-	private int tour = 0;
+	private int tour = 1;
 	private int scores[] = new int[2]; // 0 : Blanc, 1 : Noir
 
 	/**
@@ -33,7 +33,6 @@ public class Plateau {
 		this.joueurs.add(joueur2);
 		
 		this.initialisation();
-		// this.remplissageAleatoire();
 	}
 	
 	// -------------- Getters --------------
@@ -119,43 +118,6 @@ public class Plateau {
 	// -------------- Fonctions publiques --------------
 	
 	/**
-	 * Affiche les groupes de pion du pieces
-	 */
-	public void afficherGroupes() {
-		Piece plateauGroupe[][];		
-		this.trouverGroupes();
-		
-		for (ArrayList<Coordonnee> groupe : this.groupes) {
-			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
-			
-			for (Coordonnee coordonnee : groupe) {
-				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
-			}
-			
-			Interface.afficher(plateauGroupe);
-		}
-	}
-	
-	/**
-	 * Affiche les groupes de pion entourés de pion du pieces
-	 */
-	public void afficherGroupesEtoure() {
-		Piece plateauGroupe[][];	
-		
-		this.trouverGroupesEntoure();
-		
-		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
-			plateauGroupe = new Piece[this.pieces.length][this.pieces.length];
-			
-			for (Coordonnee coordonnee : groupe) {
-				plateauGroupe[coordonnee.getY()][coordonnee.getX()] = this.getPiece(coordonnee.getX(), coordonnee.getY());
-			}
-			
-			Interface.afficher(plateauGroupe);
-		}
-	}
-	
-	/**
 	 * Pose la pièce et commence un nouveau tour
 	 * @param coordonnee
 	 * @throws CaseNonVideException : si il y a déjà une pièce sur la case
@@ -216,6 +178,11 @@ public class Plateau {
 	 * @return true : Piece identique
 	 */
 	private boolean memePiece(Coordonnee pion, Coordonnee autrePion) {
+		if (pion == null
+		|| autrePion == null) {
+			return false;
+		}
+		
 		return this.getPiece(pion.getX(), pion.getY()).ordinal()
 			== this.getPiece(autrePion.getX(), autrePion.getY()).ordinal();
 	}
@@ -402,8 +369,6 @@ public class Plateau {
 	 * Enlève les pieces adverse entourées
 	 */
 	private void finTour() {
-		System.out.println("A");
-		
 		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
 		this.trouverGroupesEntoure();
 		
@@ -429,6 +394,9 @@ public class Plateau {
 	 */
 	private void nouveauTour() {
 		this.nextJoueur();
-		this.tour++;
+		
+		if (this.joueurActuel == 0) {
+			this.tour++;
+		}
 	}
 }

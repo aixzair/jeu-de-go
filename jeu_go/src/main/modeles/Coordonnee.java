@@ -11,7 +11,7 @@ public class Coordonnee {
 	 * @param y
 	 * @param piece
 	 */
-	public Coordonnee(int x, int y) {
+	public Coordonnee(final int x, final int y) {
 		this.x = x;
 		this.y = y;
 	}
