@@ -204,22 +204,53 @@ class PlateauTest {
 		Class<Plateau> plateau_class = Plateau.class;
         Method memePiece = plateau_class.getDeclaredMethod( "memePiece", Coordonnee.class, Coordonnee.class );
         
-        Coordonnee coordonnee1 = new Coordonnee(0, 0);
-        Coordonnee coordonnee2 = new Coordonnee(0, 1);
+        Coordonnee blanc1 = new Coordonnee(0, 0);
+        Coordonnee blanc2 = new Coordonnee(0, 1);
+        Coordonnee noire1 = new Coordonnee(1, 0);
+        Coordonnee noire2 = new Coordonnee(1, 1);
         
         memePiece.setAccessible(true);
         
-        // Plateau vide -> même pièce
-        assertTrue( (boolean) memePiece.invoke(plateau, coordonnee1, coordonnee2));
+        // T1 : aucune et aucune
+        assertTrue( (boolean) memePiece.invoke(plateau, new Coordonnee(0, 0), new Coordonnee(0, 1)));
         
+        // T2 : blanc et aucune
         try {
-			plateau.poserPiece(new Coordonnee(0, 0));
+			plateau.poserPiece(blanc1);
 		} catch (CaseNonVideException e) {
 			e.printStackTrace();
 		}
+        assertFalse( (boolean) memePiece.invoke(plateau, blanc1, new Coordonnee(0, 1)));
         
-        // Une pièce blanche et une autre vide
-        assertFalse( (boolean) memePiece.invoke(plateau, coordonnee1, coordonnee2));
+        // T3 : noire et aucune
+        try {
+			plateau.poserPiece(noire1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertFalse( (boolean) memePiece.invoke(plateau, noire1, new Coordonnee(0, 1)));
+        
+        // T4 : noire et blanc
+        assertFalse( (boolean) memePiece.invoke(plateau, blanc1, noire1));
+        
+        // T5 : blanc et noire
+        assertFalse( (boolean) memePiece.invoke(plateau, noire1, blanc1));
+        
+        // T6 : noire et noire
+        try {
+			plateau.poserPiece(blanc2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertTrue( (boolean) memePiece.invoke(plateau, blanc1, blanc2));
+       
+        // T7 : noire et noire
+        try {
+			plateau.poserPiece(noire2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertTrue( (boolean) memePiece.invoke(plateau, noire1, noire2));
 	}
 	
 	
@@ -268,6 +299,29 @@ class PlateauTest {
         remplirGroupe.invoke(plateau, liste, 0);
         assertEquals(2, liste.size());
         assertTrue(liste.contains(coordonnee2));
+        
+        // T4 : Plateau avec deux pièces blanches et une pièce noire
+        try {
+			plateau.poserPiece(new Coordonnee(1, 0));
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        remplirGroupe.invoke(plateau, liste, 0);
+        assertEquals(2, liste.size());
+        assertTrue(liste.contains(coordonnee2));
+	}
+	
+	public void testTrouverGroupe_private()
+	throws Exception {
+		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
+		
+		ArrayList<Coordonnee> liste = new ArrayList<Coordonnee>();
+		
+		Class<Plateau> plateau_class = Plateau.class;
+        Method trouverGroupe = plateau_class.getDeclaredMethod(
+        	"trouverGroupe"
+        );
+        trouverGroupe.setAccessible(true);
 	}
 
 }
