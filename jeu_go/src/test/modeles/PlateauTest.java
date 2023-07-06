@@ -5,6 +5,7 @@ package modeles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -311,17 +312,93 @@ class PlateauTest {
         assertTrue(liste.contains(coordonnee2));
 	}
 	
-	public void testTrouverGroupe_private()
+	/**
+	 * Test method for {@link modeles.Plateau#trouverGroupes()}.
+	 * @throws Exception
+	 */
+	@Test
+	public void testTrouverGroupes_private()
 	throws Exception {
 		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
+		ArrayList<ArrayList<Coordonnee>> groupes;
 		
-		ArrayList<Coordonnee> liste = new ArrayList<Coordonnee>();
+		Coordonnee blanc1 = new Coordonnee(0, 0);
+        Coordonnee blanc2 = new Coordonnee(0, 1);
+        Coordonnee blanc3 = new Coordonnee(2, 2);
+        Coordonnee noire1 = new Coordonnee(1, 0);
+        Coordonnee noire2 = new Coordonnee(1, 1);
 		
 		Class<Plateau> plateau_class = Plateau.class;
-        Method trouverGroupe = plateau_class.getDeclaredMethod(
-        	"trouverGroupe"
-        );
+		Field groupes_field = plateau_class.getDeclaredField("groupes");
+        Method trouverGroupe = plateau_class.getDeclaredMethod("trouverGroupes");
+        
+        groupes_field.setAccessible(true);
         trouverGroupe.setAccessible(true);
+        
+        // T1 : Plateau vide.
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertTrue(groupes.isEmpty());
+        
+        // T2 : Plateau avec une pièce blanche
+        try {
+			plateau.poserPiece(blanc1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        
+        // T3 : Plateau avec une pièce blanche et une pièce noire
+        try {
+			plateau.poserPiece(noire1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        
+        // T4 : Plateau -> blanc 1, noire 1, blanc 1
+        try {
+			plateau.poserPiece(blanc3);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(blanc3, groupes.get(2).get(0));
+        
+        // T5 : Plateau -> blanc 1, noire 2, blanc 1
+        try {
+			plateau.poserPiece(noire2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(noire2, groupes.get(1).get(1));
+        assertEquals(blanc3, groupes.get(2).get(0));
+        
+        // T6 : Plateau -> blanc 2, noire 2, blanc 1
+        try {
+			plateau.poserPiece(blanc2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(blanc2, groupes.get(0).get(1));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(noire2, groupes.get(1).get(1));
+        assertEquals(blanc3, groupes.get(2).get(0));
 	}
 
 }
