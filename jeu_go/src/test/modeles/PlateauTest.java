@@ -5,6 +5,7 @@ package modeles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -204,22 +205,53 @@ class PlateauTest {
 		Class<Plateau> plateau_class = Plateau.class;
         Method memePiece = plateau_class.getDeclaredMethod( "memePiece", Coordonnee.class, Coordonnee.class );
         
-        Coordonnee coordonnee1 = new Coordonnee(0, 0);
-        Coordonnee coordonnee2 = new Coordonnee(0, 1);
+        Coordonnee blanc1 = new Coordonnee(0, 0);
+        Coordonnee blanc2 = new Coordonnee(0, 1);
+        Coordonnee noire1 = new Coordonnee(1, 0);
+        Coordonnee noire2 = new Coordonnee(1, 1);
         
         memePiece.setAccessible(true);
         
-        // Plateau vide -> même pièce
-        assertTrue( (boolean) memePiece.invoke(plateau, coordonnee1, coordonnee2));
+        // T1 : aucune et aucune
+        assertTrue( (boolean) memePiece.invoke(plateau, new Coordonnee(0, 0), new Coordonnee(0, 1)));
         
+        // T2 : blanc et aucune
         try {
-			plateau.poserPiece(new Coordonnee(0, 0));
+			plateau.poserPiece(blanc1);
 		} catch (CaseNonVideException e) {
 			e.printStackTrace();
 		}
+        assertFalse( (boolean) memePiece.invoke(plateau, blanc1, new Coordonnee(0, 1)));
         
-        // Une pièce blanche et une autre vide
-        assertFalse( (boolean) memePiece.invoke(plateau, coordonnee1, coordonnee2));
+        // T3 : noire et aucune
+        try {
+			plateau.poserPiece(noire1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertFalse( (boolean) memePiece.invoke(plateau, noire1, new Coordonnee(0, 1)));
+        
+        // T4 : noire et blanc
+        assertFalse( (boolean) memePiece.invoke(plateau, blanc1, noire1));
+        
+        // T5 : blanc et noire
+        assertFalse( (boolean) memePiece.invoke(plateau, noire1, blanc1));
+        
+        // T6 : noire et noire
+        try {
+			plateau.poserPiece(blanc2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertTrue( (boolean) memePiece.invoke(plateau, blanc1, blanc2));
+       
+        // T7 : noire et noire
+        try {
+			plateau.poserPiece(noire2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        assertTrue( (boolean) memePiece.invoke(plateau, noire1, noire2));
 	}
 	
 	
@@ -268,6 +300,105 @@ class PlateauTest {
         remplirGroupe.invoke(plateau, liste, 0);
         assertEquals(2, liste.size());
         assertTrue(liste.contains(coordonnee2));
+        
+        // T4 : Plateau avec deux pièces blanches et une pièce noire
+        try {
+			plateau.poserPiece(new Coordonnee(1, 0));
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        remplirGroupe.invoke(plateau, liste, 0);
+        assertEquals(2, liste.size());
+        assertTrue(liste.contains(coordonnee2));
+	}
+	
+	/**
+	 * Test method for {@link modeles.Plateau#trouverGroupes()}.
+	 * @throws Exception
+	 */
+	@Test
+	public void testTrouverGroupes_private()
+	throws Exception {
+		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
+		ArrayList<ArrayList<Coordonnee>> groupes;
+		
+		Coordonnee blanc1 = new Coordonnee(0, 0);
+        Coordonnee blanc2 = new Coordonnee(0, 1);
+        Coordonnee blanc3 = new Coordonnee(2, 2);
+        Coordonnee noire1 = new Coordonnee(1, 0);
+        Coordonnee noire2 = new Coordonnee(1, 1);
+		
+		Class<Plateau> plateau_class = Plateau.class;
+		Field groupes_field = plateau_class.getDeclaredField("groupes");
+        Method trouverGroupe = plateau_class.getDeclaredMethod("trouverGroupes");
+        
+        groupes_field.setAccessible(true);
+        trouverGroupe.setAccessible(true);
+        
+        // T1 : Plateau vide.
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertTrue(groupes.isEmpty());
+        
+        // T2 : Plateau avec une pièce blanche
+        try {
+			plateau.poserPiece(blanc1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        
+        // T3 : Plateau avec une pièce blanche et une pièce noire
+        try {
+			plateau.poserPiece(noire1);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        
+        // T4 : Plateau -> blanc 1, noire 1, blanc 1
+        try {
+			plateau.poserPiece(blanc3);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(blanc3, groupes.get(2).get(0));
+        
+        // T5 : Plateau -> blanc 1, noire 2, blanc 1
+        try {
+			plateau.poserPiece(noire2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(noire2, groupes.get(1).get(1));
+        assertEquals(blanc3, groupes.get(2).get(0));
+        
+        // T6 : Plateau -> blanc 2, noire 2, blanc 1
+        try {
+			plateau.poserPiece(blanc2);
+		} catch (CaseNonVideException e) {
+			e.printStackTrace();
+		}
+        trouverGroupe.invoke(plateau);
+        groupes = (ArrayList<ArrayList<Coordonnee>>) groupes_field.get(plateau);
+        assertEquals(blanc1, groupes.get(0).get(0));
+        assertEquals(blanc2, groupes.get(0).get(1));
+        assertEquals(noire1, groupes.get(1).get(0));
+        assertEquals(noire2, groupes.get(1).get(1));
+        assertEquals(blanc3, groupes.get(2).get(0));
 	}
 
 }

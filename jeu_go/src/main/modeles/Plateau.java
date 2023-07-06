@@ -267,7 +267,8 @@ public class Plateau {
 			for (byte col = 0; col < this.pieces[lg].length; col++) {
 				pion = new Coordonnee(col, lg);				
 				
-				if (this.estInclus(this.groupes, pion)) {
+				if (this.estInclus(this.groupes, pion)
+				|| this.getPiece(col, lg).ordinal() == Piece.AUCUNE.ordinal()) {
 					continue;
 				}
 				
