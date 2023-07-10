@@ -1,6 +1,6 @@
 package modeles;
 
-public class PartieTerminerException
+public final class PartieTerminerException
 extends Exception {
 
 	public PartieTerminerException() {

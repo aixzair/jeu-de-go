@@ -1,6 +1,5 @@
 package application;
 
-import modeles.CaseNonVideException;
 import modeles.Coordonnee;
 import modeles.Joueur;
 import modeles.Plateau;
@@ -8,7 +7,7 @@ import modeles.Plateau;
 /** 
  * @author Alexandre Lerosier
  */
-public class Partie {
+public final class Partie {
 	private Plateau plateau;
 	private Interface ihm;
 
@@ -41,8 +40,8 @@ public class Partie {
 			
 			try {
 				this.plateau.poserPiece(coup);
-			} catch (CaseNonVideException e) {
-				e.printStackTrace();
+			} catch (Exception exception) {
+				exception.printStackTrace();
 			}
 		}
 	}
