@@ -122,9 +122,15 @@ public class Plateau {
 	 * Pose la pièce et commence un nouveau tour
 	 * @param coordonnee
 	 * @throws CaseNonVideException : si il y a déjà une pièce sur la case
+	 * @throws PartieTerminerException : la partie est terminée
 	 */
 	public void poserPiece(Coordonnee coordonnee)
-	throws CaseNonVideException {
+	throws CaseNonVideException, PartieTerminerException {
+		// Vérifie que la partie n'est pas terminé
+		if (this.estTerminee()) {
+			throw new PartieTerminerException();
+		}
+		
 		// Vérifie que la case est vide.
 		if (this.pieces[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
 			throw new CaseNonVideException();
@@ -159,8 +165,16 @@ public class Plateau {
 	
 	/**
 	 * Ne fait rien puis commence un nouveau tour
+	 * @throws PartieTerminerException
 	 */
-	public void passerSonTour() {
+	public void passerSonTour()
+	throws PartieTerminerException {
+		// Vérifie que la partie n'est pas terminé
+		if (this.estTerminee()) {
+			throw new PartieTerminerException();
+		}
+		
+		// Termine le tour actuel et commence un nouveau tour 
 		this.tourSuivant();
 	}
 	
@@ -393,6 +407,11 @@ public class Plateau {
 	 * Termine le tour e créé un nouveau tour.
 	 */
 	private void tourSuivant() {
+		if (this.nbCasesLibres == 0) {
+			// TODO trouver le gagnant
+			return;
+		}
+		
 		this.nextJoueur();
 		
 		if (this.joueurActuel == 0) {
