@@ -20,6 +20,7 @@ public class Plateau {
 	private Joueur gagnant;
 	
 	private int tour = 1;
+	private int nbCasesLibres = this.taille * this.taille;
 	private int scores[] = new int[2]; // 0 : Blanc, 1 : Noir
 
 	/**
@@ -124,21 +125,43 @@ public class Plateau {
 	 */
 	public void poserPiece(Coordonnee coordonnee)
 	throws CaseNonVideException {
+		// Vérifie que la case est vide.
 		if (this.pieces[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
 			throw new CaseNonVideException();
 		}
 		
-		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
+		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
 		
-		this.finTour();
-		this.nouveauTour();
+		// Pose la pièce
+		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
+		this.nbCasesLibres--;
+		
+		// Enlève les pièces adverse entourées
+		this.trouverGroupesEntoure();
+		
+		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
+			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
+				continue;
+			}
+						
+			for (Coordonnee piece : groupe) {
+				this.scores[1 - this.joueurActuel]--;
+				this.pieces[piece.getY()][piece.getX()] = Piece.AUCUNE;
+			}
+		}
+		
+		this.groupes = null;
+		this.groupesEntrourer = null;
+		
+		// Nouveau tour
+		this.tourSuivant();
 	}
 	
 	/**
 	 * Ne fait rien puis commence un nouveau tour
 	 */
 	public void passerSonTour() {
-		this.nouveauTour();
+		this.tourSuivant();
 	}
 	
 	// -------------- Fonctions privées --------------
@@ -367,33 +390,9 @@ public class Plateau {
 	}
 	
 	/**
-	 * Enlève les pieces adverse entourées
+	 * Termine le tour e créé un nouveau tour.
 	 */
-	private void finTour() {
-		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
-		this.trouverGroupesEntoure();
-		
-		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
-			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
-				continue;
-			}
-			
-			System.out.println("B");
-			
-			for (Coordonnee coordonnee : groupe) {
-				this.scores[1 - this.joueurActuel]--;
-				this.pieces[coordonnee.getY()][coordonnee.getX()] = Piece.AUCUNE;
-			}
-		}
-		
-		this.groupes = null;
-		this.groupesEntrourer = null;
-	}
-	
-	/**
-	 * Créé un nouveau tour.
-	 */
-	private void nouveauTour() {
+	private void tourSuivant() {
 		this.nextJoueur();
 		
 		if (this.joueurActuel == 0) {
