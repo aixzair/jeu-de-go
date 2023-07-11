@@ -178,6 +178,11 @@ public class Plateau {
 		this.tourSuivant();
 	}
 	
+	public void abandonner()
+	throws PartieTerminerException {
+		// TODO remplir
+	}
+	
 	// -------------- Fonctions privées --------------
 	
 	/**

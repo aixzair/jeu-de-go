@@ -1,7 +1,9 @@
 package application;
 
+import modeles.Choix;
 import modeles.Coordonnee;
 import modeles.Joueur;
+import modeles.PartieTerminerException;
 import modeles.Plateau;
 
 /** 
@@ -25,11 +27,38 @@ public final class Partie {
 	
 	public void jouer() {
 		while (!this.plateau.estTerminee()) {
+			Choix choix;
 			Coordonnee coup;
 			
+			// Affiche le plateau de jeu
 			System.out.println("");
 			System.out.println("");
 			this.ihm.afficher();
+			
+			// Demande le choix
+			choix = this.ihm.demanderChoix();
+			System.out.println("");
+			
+			// Exécute le choix
+			if (choix.ordinal() == Choix.PASSER_TOUR.ordinal()) {
+				try {
+					this.plateau.passerSonTour();
+				} catch (PartieTerminerException exception) {
+					exception.printStackTrace();
+					break;
+				}
+				
+			} else if (choix.ordinal() == Choix.POSER_PIECE.ordinal()) {
+				try {
+					this.plateau.passerSonTour();
+				} catch (PartieTerminerException exception) {
+					exception.printStackTrace();
+					break;
+				}
+				
+			} else if (choix.ordinal() == Choix.ABANDONNER.ordinal()) {
+				
+			}
 			
 			coup = this.ihm.demanderCoordonnee();
 			
