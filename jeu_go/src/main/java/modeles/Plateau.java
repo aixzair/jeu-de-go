@@ -20,6 +20,7 @@ public class Plateau {
 	private Joueur gagnant;
 	
 	private int tour = 1;
+	private int nbCasesLibres = this.taille * this.taille;
 	private int scores[] = new int[2]; // 0 : Blanc, 1 : Noir
 
 	/**
@@ -121,24 +122,66 @@ public class Plateau {
 	 * Pose la pièce et commence un nouveau tour
 	 * @param coordonnee
 	 * @throws CaseNonVideException : si il y a déjà une pièce sur la case
+	 * @throws PartieTerminerException : la partie est terminée
 	 */
 	public void poserPiece(Coordonnee coordonnee)
-	throws CaseNonVideException {
+	throws CaseNonVideException, PartieTerminerException {
+		// Vérifie que la partie n'est pas terminé
+		if (this.estTerminee()) {
+			throw new PartieTerminerException();
+		}
+		
+		// Vérifie que la case est vide.
 		if (this.pieces[coordonnee.getY()][coordonnee.getX()].ordinal() != Piece.AUCUNE.ordinal()) {
 			throw new CaseNonVideException();
 		}
 		
-		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
+		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
 		
-		this.finTour();
-		this.nouveauTour();
+		// Pose la pièce
+		this.pieces[coordonnee.getY()][coordonnee.getX()] = this.getJoueurActuel().getCouleur();
+		this.nbCasesLibres--;
+		
+		// Enlève les pièces adverse entourées
+		this.trouverGroupesEntoure();
+		
+		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
+			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
+				continue;
+			}
+						
+			for (Coordonnee piece : groupe) {
+				this.pieces[piece.getY()][piece.getX()] = Piece.AUCUNE;
+				this.scores[1 - this.joueurActuel]--;
+				this.nbCasesLibres++;
+			}
+		}
+		
+		this.groupes = null;
+		this.groupesEntrourer = null;
+		
+		// Nouveau tour
+		this.tourSuivant();
 	}
 	
 	/**
 	 * Ne fait rien puis commence un nouveau tour
+	 * @throws PartieTerminerException
 	 */
-	public void passerSonTour() {
-		this.nouveauTour();
+	public void passerSonTour()
+	throws PartieTerminerException {
+		// Vérifie que la partie n'est pas terminé
+		if (this.estTerminee()) {
+			throw new PartieTerminerException();
+		}
+		
+		// Termine le tour actuel et commence un nouveau tour 
+		this.tourSuivant();
+	}
+	
+	public void abandonner()
+	throws PartieTerminerException {
+		// TODO remplir
 	}
 	
 	// -------------- Fonctions privées --------------
@@ -367,37 +410,22 @@ public class Plateau {
 	}
 	
 	/**
-	 * Enlève les pieces adverse entourées
+	 * Termine le tour créé un nouveau tour.
 	 */
-	private void finTour() {
-		Piece couleurAdverse = Piece.getOpposer(this.getJoueurActuel().getCouleur());
-		this.trouverGroupesEntoure();
-		
-		for (ArrayList<Coordonnee> groupe : this.groupesEntrourer) {
-			if (this.pieces[groupe.get(0).getY()][groupe.get(0).getX()].ordinal() != couleurAdverse.ordinal()) {
-				continue;
-			}
-			
-			System.out.println("B");
-			
-			for (Coordonnee coordonnee : groupe) {
-				this.scores[1 - this.joueurActuel]--;
-				this.pieces[coordonnee.getY()][coordonnee.getX()] = Piece.AUCUNE;
-			}
+	private void tourSuivant() {
+		if (this.nbCasesLibres == 0) {
+			// TODO trouver le gagnant
+			return;
 		}
 		
-		this.groupes = null;
-		this.groupesEntrourer = null;
-	}
-	
-	/**
-	 * Créé un nouveau tour.
-	 */
-	private void nouveauTour() {
 		this.nextJoueur();
 		
 		if (this.joueurActuel == 0) {
 			this.tour++;
 		}
+	}
+	
+	private void partieTerminee() {
+		
 	}
 }

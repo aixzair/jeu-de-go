@@ -2,6 +2,7 @@ package application;
 
 import java.util.Scanner;
 
+import modeles.Choix;
 import modeles.Coordonnee;
 import modeles.Joueur;
 import modeles.Piece;
@@ -86,7 +87,14 @@ public class Interface {
 	
 	// ----------- Méthodes d'instances -----------
 
+	/**
+	 * Créer une interface homme machine
+	 * @param partie
+	 */
 	public Interface(Partie partie) {
+		if (partie == null) {
+            throw new NullPointerException();
+        }
 		this.partie = partie;
 	}
 	
@@ -124,6 +132,35 @@ public class Interface {
 		System.out.print("En quelle colonne voullez-vous jouer ? ");
 		x = scanner.nextInt() - 1;
 		
+		System.out.println("");
 		return new Coordonnee(x, y);
+	}
+	
+	/**
+	 * Renvoie le choix de l'utilisateur
+	 * @return	- passer son tour,
+	 * 			- poser une pièce,
+	 * 			- abandonner;
+	 */
+	public Choix demanderChoix() {
+		Joueur joueur = this.partie.getPlateau().getJoueurActuel();
+		Scanner scanner = new Scanner(System.in);
+		int choix = 0;
+		
+		System.out.println("");
+		System.out.println(joueur.getPrenom());
+		System.out.println("Passer votre tour : 1");
+		System.out.println("Poser une pièce : 2");
+		System.out.println("Abandonner : 3");
+		System.out.print("Quel est votre choix : ");
+		
+		choix = scanner.nextInt();
+		
+		while (choix < 1 || choix > 3) {
+			System.out.println("Votre choix n'est pas valide.");
+			choix = scanner.nextInt();
+		}
+		
+		return Choix.values()[choix - 1];
 	}
 }

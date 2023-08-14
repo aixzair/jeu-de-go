@@ -30,7 +30,11 @@ class PlateauTest {
 		assertTrue(plateau instanceof Plateau);
 		
 		assertEquals(j1, plateau.getJoueurActuel());
-		plateau.passerSonTour();
+		try {
+			plateau.passerSonTour();
+		} catch (PartieTerminerException e) {
+			e.printStackTrace();
+		}
 		assertEquals(j2, plateau.getJoueurActuel());
 	}
 
@@ -48,8 +52,8 @@ class PlateauTest {
 		
 		try {
 			plateau.poserPiece(new Coordonnee(x, y));
-		} catch (CaseNonVideException e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
 		
 		assertFalse(plateau.estCaseLibre(y, x));
@@ -68,7 +72,11 @@ class PlateauTest {
 		assertTrue(plateau instanceof Plateau);
 		
 		assertEquals(j1, plateau.getJoueurActuel());
-		plateau.passerSonTour();
+		try {
+			plateau.passerSonTour();
+		} catch (PartieTerminerException exception) {
+			exception.printStackTrace();
+		}
 		assertEquals(j2, plateau.getJoueurActuel());
 	}
 
@@ -120,8 +128,8 @@ class PlateauTest {
 		
 		try {
 			plateau.poserPiece(new Coordonnee(x, y));
-		} catch (CaseNonVideException e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
 		
 		assertEquals(Piece.BLANC, plateau.getPiece(x, y));
@@ -131,24 +139,22 @@ class PlateauTest {
 	 * Test method for {@link modeles.Plateau#getPieces()}.
 	 */
 	@Test
-	public void testGetPieces() {
+	public void testGetPieces()
+	throws Exception {
 		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
 		Piece pieces[][] = plateau.getPieces().clone();
 		
-		try {
-			plateau.poserPiece(new Coordonnee(0, 0));
-		} catch (CaseNonVideException e) {
-			e.printStackTrace();
-		}
-				
+		plateau.poserPiece(new Coordonnee(0, 0));
 		assertNotEquals(pieces, plateau.getPieces());
 	}
 
 	/**
 	 * Test method for {@link modeles.Plateau#getTour()}.
+	 * @throws PartieTerminerException 
 	 */
 	@Test
-	public void testGetTour() {
+	public void testGetTour()
+	throws PartieTerminerException {
 		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
 		
 		assertEquals(1, plateau.getTour());
@@ -161,9 +167,11 @@ class PlateauTest {
 
 	/**
 	 * Test method for {@link modeles.Plateau#poserPiece(modeles.Coordonnee)}.
+	 * @throws PartieTerminerException 
 	 */
 	@Test
-	public void testPoserPiece() {
+	public void testPoserPiece()
+	throws Exception {
 		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
 		
 		int x = 1;
@@ -171,20 +179,17 @@ class PlateauTest {
 		
 		assertEquals(Piece.AUCUNE, plateau.getPiece(x, y));
 				
-		try {
-			plateau.poserPiece(new Coordonnee(x, y));
-		} catch (CaseNonVideException e) {
-			e.printStackTrace();
-		}
-		
+		plateau.poserPiece(new Coordonnee(x, y));
 		assertEquals(Piece.BLANC, plateau.getPiece(x, y));
 	}
 
 	/**
 	 * Test method for {@link modeles.Plateau#passerSonTour()}.
+	 * @throws PartieTerminerException 
 	 */
 	@Test
-	public void testPasserSonTour() {
+	public void testPasserSonTour()
+	throws PartieTerminerException {
 		Plateau plateau = new Plateau(new Joueur("a"), new Joueur("b"));
 		Piece pieces [][] = plateau.getPieces();
 		
