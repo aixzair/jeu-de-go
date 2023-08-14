@@ -147,6 +147,7 @@ public class Interface {
 		Scanner scanner = new Scanner(System.in);
 		int choix = 0;
 		
+		System.out.println("");
 		System.out.println(joueur.getPrenom());
 		System.out.println("Passer votre tour : 1");
 		System.out.println("Poser une pièce : 2");

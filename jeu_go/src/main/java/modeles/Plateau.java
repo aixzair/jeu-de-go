@@ -151,8 +151,9 @@ public class Plateau {
 			}
 						
 			for (Coordonnee piece : groupe) {
-				this.scores[1 - this.joueurActuel]--;
 				this.pieces[piece.getY()][piece.getX()] = Piece.AUCUNE;
+				this.scores[1 - this.joueurActuel]--;
+				this.nbCasesLibres++;
 			}
 		}
 		
@@ -409,7 +410,7 @@ public class Plateau {
 	}
 	
 	/**
-	 * Termine le tour e créé un nouveau tour.
+	 * Termine le tour créé un nouveau tour.
 	 */
 	private void tourSuivant() {
 		if (this.nbCasesLibres == 0) {
@@ -422,5 +423,9 @@ public class Plateau {
 		if (this.joueurActuel == 0) {
 			this.tour++;
 		}
+	}
+	
+	private void partieTerminee() {
+		
 	}
 }
