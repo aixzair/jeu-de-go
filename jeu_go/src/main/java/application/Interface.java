@@ -16,9 +16,7 @@ public class Interface {
 	private static final String VIDE = " ";
 	
 	private Partie partie;
-	
-	// ----------- Méthodes publiques de classe -----------
-	
+		
 	public static void afficher(final Piece[][] emplacements) {
 		for (byte lg = 0; lg < emplacements.length; lg++) {
 			if (lg == 0) {
@@ -75,9 +73,7 @@ public class Interface {
 	public static void message(final String message) {
 		System.out.println(message);
 	}
-	
-	// ----------- Méthodes privées de classe -----------
-	
+		
 	private static void afficherLigne(final int longueur) {
 		for (byte i = 0; i < longueur; i++) {
 			System.out.print("-");
@@ -85,8 +81,6 @@ public class Interface {
 		System.out.println("");
 	}
 	
-	// ----------- Méthodes d'instances -----------
-
 	/**
 	 * Créer une interface homme machine
 	 * @param partie
@@ -97,9 +91,7 @@ public class Interface {
         }
 		this.partie = partie;
 	}
-	
-	// ----------- Getters -----------
-	
+		
 	public String getString(String message) {
 		System.out.print(message + " ");
 		
@@ -107,9 +99,7 @@ public class Interface {
 			return scanner.next();
 		}
 	}
-	
-	// ----------- Méthodes publiques -----------
-	
+		
 	/**
 	 * Affiche le plateau.
 	 */

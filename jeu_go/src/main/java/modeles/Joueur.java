@@ -11,9 +11,7 @@ public class Joueur {
 	public Joueur(String prenom) {
 		this.prenom = prenom;
 	}
-	
-	// --------------- Setters ---------------
-	
+		
 	// -- Setter protected --
 	
 	/**
@@ -23,9 +21,7 @@ public class Joueur {
 	protected void setCouleur(Piece couleur) {
 		this.couleur = couleur;
 	}
-	
-	// --------------- Getters ---------------
-	
+		
 	/**
 	 * Renvoie la couleur du joueur
 	 * @return la couleur du joueur
