@@ -7,12 +7,13 @@ public enum Piece {
 	
 	public static Piece getOpposer(Piece piece) {
 		if (piece == null
-		|| piece.ordinal() == Piece.AUCUNE.ordinal()) {
+		|| piece.ordinal() == Piece.AUCUNE.ordinal()
+		) {
 			return null;
 		}
 		
-		return (piece.ordinal() == Piece.BLANC.ordinal())?
-				Piece.NOIR:
-				Piece.BLANC;
+		return (piece.ordinal() == Piece.BLANC.ordinal())
+				? Piece.NOIR
+				: Piece.BLANC;
 	}
 }

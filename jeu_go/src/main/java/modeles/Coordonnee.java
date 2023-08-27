@@ -43,8 +43,6 @@ public class Coordonnee {
 			    + "; y : " + this.y;
 	}
 	
-	// ------------ Getters ------------
-
 	/** Renvoi la propriété x
 	 * @return the x
 	 */

@@ -35,9 +35,7 @@ public class Plateau {
 		
 		this.initialisation();
 	}
-	
-	// -------------- Getters --------------
-	
+		
 	/**
 	 * Renvoie vrai si l'emplacement est vide
 	 * @param lg
@@ -115,9 +113,7 @@ public class Plateau {
 	public int getTour() {
 		return this.tour;
 	}
-	
-	// -------------- Fonctions publiques --------------
-	
+		
 	/**
 	 * Pose la pièce et commence un nouveau tour
 	 * @param coordonnee
@@ -183,9 +179,7 @@ public class Plateau {
 	throws PartieTerminerException {
 		// TODO remplir
 	}
-	
-	// -------------- Fonctions privées --------------
-	
+		
 	/**
 	 * Met les cases du pieces à Piece.VIDE
 	 */
